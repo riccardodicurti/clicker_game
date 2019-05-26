@@ -3,7 +3,7 @@
   <div id="potenziamenti">
 
     <div v-for="( u ) in upgrades" :key="u.id">
-      [ lv: {{ u.lv }} ]: <button class="" @click="upgrade(u.id, u.base_price)" :disabled="gold < u.base_price"> {{ u.base_price }} {{ u.name }} </button> {{ u.tooltip }}
+      [ lv: {{ u.lv }} ]: <button class="" @click="upgrade(u.id, u.price)" :disabled="gold < u.price"> {{ u.price }} - {{ u.name }} </button> {{ u.tooltip }}
     </div>
 
   </div>
@@ -21,8 +21,8 @@ export default {
     }
   },
   methods: {
-    upgrade(id, base_price) {
-      this.$emit('upgrade', { id, base_price })
+    upgrade(id, price) {
+      this.$emit('upgrade', { id, price })
     }
   }
 }

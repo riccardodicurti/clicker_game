@@ -8,7 +8,7 @@
     <span>food reserves: {{ food }}</span></br>
     </br>
     <button @click="click()" alt="make oro"> undermine gold </button></br>
-    <button @click="buy_food()" alt="buy food" :disabled="gold < 25"> buy food at the general store </button>
+    <button @click="buy_food()" alt="buy food" :disabled="gold < other[0].price"> {{ other[0].price }} - {{ other[0].tooltip }} </button>
   </div>
 
 </template>
@@ -17,7 +17,7 @@
 
 export default {
   name: 'Clicker',
-  props: ['gold', 'food', 'stats'],
+  props: ['gold', 'food', 'stats', 'other'],
   data () {
     return {
 

@@ -1,7 +1,7 @@
 <template>
   <div id="index">
 
-    <h1> clicker game </h1>
+    <h1> </h1>
 
     <div class="row">
       <div class="col-md-2">
@@ -9,7 +9,7 @@
       </div>
 
       <div class="col-md-4">
-        <Clicker :gold="gold" :food="food" :stats="stats" @click="click" @buy_food="buy_food" />
+        <Clicker :gold="gold" :food="food" :stats="stats" :other="other" @click="click" @buy_food="buy_food" />
       </div>
       <div class="col-md-4">
         <Upgrades :upgrades="upgrades" :gold="gold" @upgrade="upgrade" />
@@ -34,16 +34,19 @@
     },
     data () {
       return {
-        gold: 1200,
+        gold: 100,
         food: 100,
         upgrades: [
-          { id: 0, name: 'Auto Clicker', lv: 0, tooltip: '+1 gold/s', base_price: 100 },
-          { id: 1, name: 'Colonists', lv: 0, tooltip: '+10 gold/s -2 food/s', base_price: 200 },
-          { id: 2, name: 'Mines', lv: 0, tooltip: 'colonist + ( colonist * mines * 2)', base_price: 1000 },
+          { id: 0, name: 'Auto Clicker', lv: 0, tooltip: '+1 gold/s', price: 100 },
+          { id: 1, name: 'Colonists', lv: 0, tooltip: '+10 gold/s -2 food/s', price: 200 },
+          { id: 2, name: 'Mines', lv: 0, tooltip: 'colonist + ( colonist * mines * 2)', price: 1000 }       
         ],
         stats: [
           { id: 0, name: 'undermine gold', value: 0, tooltip: ' gold/s'},
-          { id: 1, name: 'food consumption', value: 0, tooltip: ' food/s'},
+          { id: 1, name: 'food consumption', value: 0, tooltip: ' food/s'}
+        ],
+        other: [
+          { id: 0, name: 'food', lv: 0, tooltip: ' buy food at the general store', price: 25},
         ]
       }
     },
@@ -51,40 +54,45 @@
       this.set_auto_clicker();
     },
     methods: {
+      
       upgrade(payload) {
-        this.gold -= payload.base_price;
+        this.gold -= payload.price;
         this.upgrades.find( upgrade => upgrade.id === payload.id ).lv += 1;
-        this.update_stats();
+        var price = this.upgrades.find( upgrade => upgrade.id === payload.id ).price;   
+        this.upgrades.find( upgrade => upgrade.id === payload.id ).price = Math.round( price * 1.2);     
       },
+      
       click() {
         this.gold++;
       },
-      buy_food() {
-        if ( this.gold >= 25 ) {
-            this.gold -= 25;
-            this.food += 100;
-        }
+      
+      buy_food(payload) {
+          this.gold -= this.other[0].price;
+          this.food += this.other[0].price * 4;
+          
+          this.other[0].price = Math.round( this.other[0].price * 1.2);
       },
+      
       game_loop() {
         var auto_clicker = this.upgrades.find( upgrade => upgrade.id === 0 ).lv;
         var colonists = this.upgrades.find( upgrade => upgrade.id === 1 ).lv;
         var mines = this.upgrades.find( upgrade => upgrade.id === 2 ).lv;
-
+        
+        var undermine_gold = auto_clicker * 1;
+        var food_consumption = 0; 
+        
         if ( this.food >= ( colonists * 2 ) ) {
-          this.food -= ( colonists * 2);
-          this.gold += ( colonists * 10 ) + ( colonists * 10 * mines * 2);
+          food_consumption = ( colonists * 2);
+          undermine_gold += ( colonists * 10 ) + ( colonists * 10 * mines * 2);
         }
-
-        this.gold += auto_clicker * 1;
+        
+        this.gold += undermine_gold;
+        this.food -= food_consumption;                  
+                  
+        this.stats.find( upgrade => upgrade.id === 0 ).value = undermine_gold;
+        this.stats.find( upgrade => upgrade.id === 1 ).value = food_consumption;
       },
-      update_stats() {
-        var auto_clicker = this.upgrades.find( upgrade => upgrade.id === 0 ).lv;
-        var colonists = this.upgrades.find( upgrade => upgrade.id === 1 ).lv;
-        var mines = this.upgrades.find( upgrade => upgrade.id === 2 ).lv;
-
-        this.stats.find( upgrade => upgrade.id === 0 ).value = auto_clicker + ( colonists * 10 ) + ( colonists * 10 * mines * 2);
-        this.stats.find( upgrade => upgrade.id === 1 ).value = colonists * 2;
-      },
+      
       set_auto_clicker() {
           setInterval(this.game_loop, 1000);
       }
@@ -92,7 +100,6 @@
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 
   h1 {
@@ -102,5 +109,5 @@
   button[disabled], html input[disabled] {
       opacity: 0.4;
   }
-
+  
 </style>
