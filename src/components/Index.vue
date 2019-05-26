@@ -1,20 +1,16 @@
 <template>
   <div id="index">
-
     <h1> </h1>
-
     <div class="row">
       <div class="col-md-2">
         </br>
       </div>
-
       <div class="col-md-4">
         <Clicker :gold="gold" :food="food" :stats="stats" :other="other" @click="click" @buy_food="buy_food" />
       </div>
       <div class="col-md-4">
         <Upgrades :upgrades="upgrades" :gold="gold" @upgrade="upgrade" />
       </div>
-
       <div class="col-md-2">
         </br>
       </div>
@@ -54,45 +50,35 @@
       this.set_auto_clicker();
     },
     methods: {
-      
       upgrade(payload) {
         this.gold -= payload.price;
         this.upgrades.find( upgrade => upgrade.id === payload.id ).lv += 1;
         var price = this.upgrades.find( upgrade => upgrade.id === payload.id ).price;   
         this.upgrades.find( upgrade => upgrade.id === payload.id ).price = Math.round( price * 1.2);     
       },
-      
       click() {
         this.gold++;
       },
-      
       buy_food(payload) {
           this.gold -= this.other[0].price;
           this.food += this.other[0].price * 4;
-          
           this.other[0].price = Math.round( this.other[0].price * 1.2);
       },
-      
       game_loop() {
         var auto_clicker = this.upgrades.find( upgrade => upgrade.id === 0 ).lv;
         var colonists = this.upgrades.find( upgrade => upgrade.id === 1 ).lv;
-        var mines = this.upgrades.find( upgrade => upgrade.id === 2 ).lv;
-        
+        var mines = this.upgrades.find( upgrade => upgrade.id === 2 ).lv; 
         var undermine_gold = auto_clicker * 1;
         var food_consumption = 0; 
-        
         if ( this.food >= ( colonists * 2 ) ) {
           food_consumption = ( colonists * 2);
           undermine_gold += ( colonists * 10 ) + ( colonists * 10 * mines * 2);
         }
-        
         this.gold += undermine_gold;
         this.food -= food_consumption;                  
-                  
         this.stats.find( upgrade => upgrade.id === 0 ).value = undermine_gold;
         this.stats.find( upgrade => upgrade.id === 1 ).value = food_consumption;
       },
-      
       set_auto_clicker() {
           setInterval(this.game_loop, 1000);
       }
