@@ -1,6 +1,6 @@
 <template>
   <div id="index">
-    <h1> </h1>
+    <h1> Lemonade stand </h1>
     <div class="row">
       <div class="col-md-2">
         </br>
@@ -30,8 +30,9 @@
     },
     data () {
       return {
-        gold: 100,
+        gold: 1000,
         food: 100,
+        multiplier: 1.15, 
         upgrades: [
           { id: 0, name: 'Auto Clicker', lv: 0, tooltip: '+1 gold/s', price: 100 },
           { id: 1, name: 'Colonists', lv: 0, tooltip: '+10 gold/s -2 food/s', price: 200 },
@@ -52,17 +53,21 @@
     methods: {
       upgrade(payload) {
         this.gold -= payload.price;
-        this.upgrades.find( upgrade => upgrade.id === payload.id ).lv += 1;
-        var price = this.upgrades.find( upgrade => upgrade.id === payload.id ).price;   
-        this.upgrades.find( upgrade => upgrade.id === payload.id ).price = Math.round( price * 1.2);     
+        
+        var price = this.upgrades.find( upgrade => upgrade.id === payload.id ).price;
+        var lv = this.upgrades.find( upgrade => upgrade.id === payload.id ).lv;     
+                
+        this.upgrades.find( upgrade => upgrade.id === payload.id ).lv += 1;      
+        this.upgrades.find( upgrade => upgrade.id === payload.id ).price = Math.round( price * Math.pow(this.multiplier, lv) );     
       },
       click() {
         this.gold++;
       },
       buy_food(payload) {
           this.gold -= this.other[0].price;
-          this.food += this.other[0].price * 4;
-          this.other[0].price = Math.round( this.other[0].price * 1.2);
+          this.food += this.other[0].price + 25;
+          this.other[0].lv += 1;
+          this.other[0].price = Math.round( this.other[0].price * Math.pow(this.multiplier, this.other[0].lv) );
       },
       game_loop() {
         var auto_clicker = this.upgrades.find( upgrade => upgrade.id === 0 ).lv;
@@ -87,13 +92,5 @@
 </script>
 
 <style>
-
-  h1 {
-    margin-bottom: 40px;
-  }
-
-  button[disabled], html input[disabled] {
-      opacity: 0.4;
-  }
   
 </style>

@@ -1,0 +1,21 @@
+
+@import url('https://fonts.googleapis.com/css?family=Annie+Use+Your+Telescope&display=swap');
+
+@font-face {
+  font-family: LemonadeStand;
+  src: url(../fonts/lemonade_stand.otf);
+}
+
+h1 {
+  font-family: LemonadeStand;
+  margin-bottom: 40px;
+}
+
+span, button, div {
+  font-family: 'Annie Use Your Telescope', cursive;
+  font-size: 14px;
+}
+
+button[disabled], html input[disabled] {
+    opacity: 0.4;
+}
