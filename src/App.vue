@@ -1,18 +1,19 @@
 <template>
   <div id="app">
-    <Index />
+  <p>
+    <router-link to="/">Go to Index</router-link>
+    <router-link to="/hello">Go to Hello</router-link>
+  </p>
+  <!-- route outlet -->
+  <!-- component matched by the route will render here -->
+  <router-view></router-view>
   </div>
 </template>
 
 <script>
 
-import Index from './components/Index.vue'
-
 export default {
   name: 'App',
-  components: {
-    Index
-  },
   data () {
     return {
     }
