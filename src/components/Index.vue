@@ -48,6 +48,7 @@
       }
     },
     mounted: function() {
+      this.load_game();
       this.set_auto_clicker();
     },
     methods: {
@@ -62,6 +63,7 @@
       },
       click() {
         this.gold++;
+        // da rimuovere 
       },
       buy_food(payload) {
           this.gold -= this.other[0].price;
@@ -86,6 +88,42 @@
       },
       set_auto_clicker() {
           setInterval(this.game_loop, 1000);
+          setInterval(this.save_game, 300000);
+      },
+      save_game() {
+        var json = {
+          "gold": this.gold,
+          "food": this.food,
+          "multiplier": this.multiplier,
+          "upgrades": this.upgrades,
+          "stats": this.stats,
+          "other": this.other
+        };
+        
+        localStorage.setItem('lemonade_stand', JSON.stringify(json));
+      },
+      load_game() {
+        if (localStorage.getItem('lemonade_stand')) {
+            var lemonade_stand = JSON.parse(localStorage.getItem('lemonade_stand'));
+            
+            this.gold = lemonade_stand.gold;
+            this.food = lemonade_stand.food;
+            this.multiplier = lemonade_stand.multiplier;
+            
+            this.upgrades.find( upgrade => upgrade.id === 0 ).price = lemonade_stand.upgrades.find( upgrade => upgrade.id === 0 ).price;
+            this.upgrades.find( upgrade => upgrade.id === 0 ).lv = lemonade_stand.upgrades.find( upgrade => upgrade.id === 0 ).lv;
+            
+            this.upgrades.find( upgrade => upgrade.id === 1 ).price = lemonade_stand.upgrades.find( upgrade => upgrade.id === 1 ).price;
+            this.upgrades.find( upgrade => upgrade.id === 1 ).lv = lemonade_stand.upgrades.find( upgrade => upgrade.id === 1 ).lv;
+            
+            this.upgrades.find( upgrade => upgrade.id === 2 ).price = lemonade_stand.upgrades.find( upgrade => upgrade.id === 2 ).price;
+            this.upgrades.find( upgrade => upgrade.id === 2 ).lv = lemonade_stand.upgrades.find( upgrade => upgrade.id === 2 ).lv;
+            
+            this.other[0].price = lemonade_stand.other[0].price;
+            this.other[0].lv = lemonade_stand.other[0].lv;
+            
+            
+        }
       }
     }
   }

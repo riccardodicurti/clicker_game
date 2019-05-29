@@ -1,21 +1,21 @@
 <template>
   <div id="hello">
-    <h1> Hello </h1>
+    <h1> Settings </h1>
   </div>
 </template>
 
 <script>
 
   export default {
-    name: 'Hello',
+    name: 'Settings',
     data () {
       return {
 
       }
     }
-  }
+  }  
 </script>
 
 <style>
-  
+
 </style>

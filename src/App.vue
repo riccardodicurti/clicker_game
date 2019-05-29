@@ -1,12 +1,17 @@
 <template>
-  <div id="app">
-  <p>
-    <router-link to="/">Go to Index</router-link>
-    <router-link to="/hello">Go to Hello</router-link>
-  </p>
-  <!-- route outlet -->
-  <!-- component matched by the route will render here -->
-  <router-view></router-view>
+  <div id="app">  
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <router-link to="/">Game</router-link>
+      </li>
+      <li class="nav-item">
+        <router-link to="/settings">Settings</router-link>
+      </li>
+    </ul>  
+    
+    <!-- route outlet -->
+    <!-- component matched by the route will render here -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -16,6 +21,7 @@ export default {
   name: 'App',
   data () {
     return {
+      
     }
   }
 }
